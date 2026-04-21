@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>RESTO ROSE FAMILY — Меню и доставка</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fefaf5;  /* светлый тёплый фон */
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #2c241a;
+      line-height: 1.4;
+    }
+
+    /* контейнер */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* шапка */
+    .header {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 0 #f0e6dc;
+      padding: 24px 0 20px;
+      border-radius: 0 0 32px 32px;
+    }
+
+    .resto-name {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #d98a5b;
+      margin-bottom: 8px;
+    }
+
+    .resto-name span {
+      font-weight: 400;
+      color: #b87a52;
+    }
+
+    .badge {
+      background: #fff1e6;
+      color: #c26a3a;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    /* контактная карточка */
+    .info-grid {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 20px 24px;
+      margin: 24px 0 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+      border: 1px solid #ffe8dd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: space-between;
+    }
+
+    .info-item {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #b87a52;
+      margin-bottom: 8px;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #2c241a;
+      line-height: 1.4;
+    }
+
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fef2ea;
+      padding: 8px 18px;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #c26a3a;
+      transition: all 0.2s ease;
+      border: 1px solid #ffe0cf;
+    }
+
+    .btn-primary {
+      background: #d98a5b;
+      color: white;
+      border: none;
+      box-shadow: 0 2px 8px rgba(217, 138, 91, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #c27244;
+      transform: translateY(-2px);
+    }
+
+    .btn:hover {
+      background: #ffe6da;
+      transform: translateY(-1px);
+    }
+
+    /* навигация по категориям */
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 32px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #ffeadc;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .cat-link {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #7f6148;
+      background: #fff6ef;
+      white-space: nowrap;
+    }
+
+    .cat-link.active {
+      background: #d98a5b;
+      color: white;
+      box-shadow: 0 4px 10px rgba(217, 138, 91, 0.3);
+    }
+
+    /* секции меню */
+    .menu-section {
+      display: none;
+      animation: fade 0.25s ease;
+    }
+
+    .menu-section.active-section {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    .category-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 28px 0 16px;
+      border-left: 6px solid #d98a5b;
+      padding-left: 18px;
+      color: #34281e;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 24px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+      transition: 0.2s;
+      border: 1px solid #ffede2;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+      border-color: #ffd9c4;
+    }
+
+    .dish-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #3b2b1e;
+    }
+
+    .dish-desc {
+      font-size: 0.85rem;
+      color: #6b4f38;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+
+    .dish-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #d98a5b;
+      margin-top: 8px;
+    }
+
+    .subnote {
+      font-size: 0.7rem;
+      color: #a58163;
+      margin-top: 6px;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: 0;
+      height: 1px;
+      background: #ffeadc;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px 30px;
+      border-top: 1px solid #ffdecb;
+      margin-top: 40px;
+      color: #9e7b60;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 700px) {
+      .resto-name { font-size: 1.6rem; }
+      .info-grid { flex-direction: column; gap: 16px; }
+      .btn { padding: 6px 14px; font-size: 0.8rem;}
+      .category-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <div class="container">
+    <div class="resto-name">RESTO ROSE <span>FAMILY</span></div>
+    <div class="badge">Европейская кухня · Роллы · Пицца · Завтраки</div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- контактная информация -->
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">📍 Адрес</div>
+      <div class="info-value">Санкт-Петербург, Пушкинский р-н, Шушары, тер. Пулковское, ул. Переведенская, 4к2с2, 196605</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">🕒 Часы работы</div>
+      <div class="info-value">Ежедневно · 10:00 – 22:00</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">📞 Контакты</div>
+      <div class="info-value">+7 (921) 788-76-26</div>
+      <div class="contact-buttons">
+        <a href="tel:+79217887626" class="btn btn-primary">📞 Позвонить</a>
+        <a href="https://wa.me/79217887626" target="_blank" class="btn">💬 WhatsApp</a>
+        <a href="https://vk.ru/restorosefamily" target="_blank" class="btn">📱 VK</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- навигация по категориям (коротко, но полно) -->
+  <div class="category-nav" id="categoryNav">
+    <button class="cat-link active" data-cat="zavtrak">Завтраки</button>
+    <button class="cat-link" data-cat="salads">Салаты</button>
+    <button class="cat-link" data-cat="soups">Супы</button>
+    <button class="cat-link" data-cat="pasta">Паста</button>
+    <button class="cat-link" data-cat="wok">WOK</button>
+    <button class="cat-link" data-cat="ot-shefa">От шефа</button>
+    <button class="cat-link" data-cat="poke">Поке</button>
+    <button class="cat-link" data-cat="zakuski">Закуски</button>
+    <button class="cat-link" data-cat="rolls">Роллы</button>
+    <button class="cat-link" data-cat="pizza">Пицца</button>
+    <button class="cat-link" data-cat="desserts">Десерты</button>
+    <button class="cat-link" data-cat="kids">Детское меню</button>
+    <button class="cat-link" data-cat="bar">Бары/Напитки</button>
+  </div>
+
+  <!-- ===================== ВСЕ РАЗДЕЛЫ МЕНЮ ===================== -->
+  <!-- 1. ЗАВТРАКИ -->
+  <div id="zavtrak" class="menu-section active-section">
+    <div class="category-title">🍳 Завтраки (до 13:00)</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Глазунья с копчёностями</div><div class="dish-desc">Яичница с беконом и колбасками</div><div class="dish-price">540 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Шакшука</div><div class="dish-desc"></div><div class="dish-price">540 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Морской завтрак</div><div class="dish-desc">Омлет со шпинатом и креветками</div><div class="dish-price">600 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Домашний завтрак</div><div class="dish-desc">Скрэмбл со сметаной и сосисками</div><div class="dish-price">520 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Омлет</div><div class="dish-desc">2 яйца, сливки, моцарелла</div><div class="dish-price">390 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Русский завтрак</div><div class="dish-desc">3 блинчика со сметаной или сгущёнкой, овсяная каша с маслом</div><div class="dish-price">400 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Сырники</div><div class="dish-desc">С топпингом (сгущенка/сметана)</div><div class="dish-price">420 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Топпинги к завтракам</div><div class="dish-desc">Шампиньоны 80₽ / Пепперони 100₽ / Помидоры 80₽ / Ветчина 100₽ / Форель 150₽ / Курица 100₽ / Бекон 100₽ / Лук 50₽</div><div class="dish-price">от 50 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 2. САЛАТЫ -->
+  <div id="salads" class="menu-section">
+    <div class="category-title">🥗 Салаты</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Цезарь с курицей</div><div class="dish-desc">Айсберг, куриная грудка су-вид, пармезан, черри, соус цезарь, гренки</div><div class="dish-price">690 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Цезарь с креветками</div><div class="dish-desc">Айсберг, креветки, пармезан, черри, соус цезарь, гренки</div><div class="dish-price">750 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Тёплый салат с говядиной</div><div class="dish-desc">Говядина, красный лук, черри, лук фри, микс, перец, арахис, горчичная заправка</div><div class="dish-price">740 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Салат с жареным сыром моцарелла</div><div class="dish-desc">Микс, черри, огурец, редис, арахис, моцарелла в панировке, клюквенный соус, манговый соус</div><div class="dish-price">620 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Салат с курицей</div><div class="dish-desc">Курица терияки, айсберг, редис, картофель бэби, черри, укроп, морковь по-корейски, горчичный соус</div><div class="dish-price">680 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Салат с хрустящими баклажанами</div><div class="dish-desc">Баклажан, микс, черри, кинза, крем-сыр, сладкий чили, кунжут</div><div class="dish-price">680 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Греческий салат</div><div class="dish-desc">Айсберг, помидор, огурец, оливки, перец, красный лук, фетакса, орегано, оливковое масло</div><div class="dish-price">580 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Салат с форелью</div><div class="dish-desc">Форель, огурец, чукка, микс, черри, эдамамэ, соус терияки, кунжут, горчичная заправка</div><div class="dish-price">750 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 3. СУПЫ -->
+  <div id="soups" class="menu-section">
+    <div class="category-title">🍲 Супы</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Куриный суп с яйцом</div><div class="dish-desc">Курица, паста стеллинг, морковь, яйцо, лук</div><div class="dish-price">495 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Солянка</div><div class="dish-desc">Огурцы, томатная паста, ветчина, курица, бекон, томаты с/с, пепперони, лимон, маслины, сметана</div><div class="dish-price">650 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Уха по-фински</div><div class="dish-desc">Форель, перец, помидор, сливки, песто, лук, картофель, кунжут</div><div class="dish-price">650 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Cream Tom Yam</div><div class="dish-desc">Паста том ям, креветки, кальмар, сливки, черри, кокосовое молоко, шампиньоны, кунжут, рис</div><div class="dish-price">900 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Грибной крем-суп</div><div class="dish-desc">Шампиньоны, картофель, лук, сливки, чеснок, гречка, сливочное масло</div><div class="dish-price">590 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Сырный крем-суп</div><div class="dish-desc">Куриная грудка, сыр плавленый, картофель, сливки, лук, лук фри</div><div class="dish-price">610 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 4. ПАСТА -->
+  <div id="pasta" class="menu-section">
+    <div class="category-title">🍝 Паста</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Карбонара</div><div class="dish-desc">Фетучини, бекон, сливки, пармезан</div><div class="dish-price">690 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Болоньезе</div><div class="dish-desc">Фетучини, говяжий фарш, пармезан, томаты, лук</div><div class="dish-price">745 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Фетучини с креветками</div><div class="dish-desc">Креветки, сливки, помидор, песто</div><div class="dish-price">850 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Фетучини с курицей и шпинатом</div><div class="dish-desc">Куриная грудка, шпинат, чеснок, сливки</div><div class="dish-price">700 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Фетучини с говядиной</div><div class="dish-desc">Говядина, шампиньоны, лук, перец, сливки, соевый, демиглас, пармезан</div><div class="dish-price">800 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 5. WOK -->
+  <div id="wok" class="menu-section">
+    <div class="category-title">🥢 WOK (лапша удон)</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Удон с овощами</div><div class="dish-desc">Лук, морковь, шампиньоны, перец, терияки, соевый, кунжут</div><div class="dish-price">480 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Удон с курицей</div><div class="dish-desc">Курица, лук, морковь, шампиньоны, перец, соусы, кунжут</div><div class="dish-price">630 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Удон с говядиной</div><div class="dish-desc">Говядина, лук, морковь, грибы, перец, терияки, соевый</div><div class="dish-price">710 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Удон с морепродуктами</div><div class="dish-desc">Креветка, кальмар, мидия, лук, морковь, шампиньоны, перец, соусы, кунжут</div><div class="dish-price">890 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 6. ОТ ШЕФА + горячее -->
+  <div id="ot-shefa" class="menu-section">
+    <div class="category-title">🔥 От шефа / Горячее</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Стейк говядина</div><div class="dish-desc">160гр говяжья вырезка, брусничный соус</div><div class="dish-price">1300 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Бефстроганов с пюре</div><div class="dish-desc">Говядина, лук, сливки, шампиньоны, картофельное пюре, лук фри, маринованные огурцы</div><div class="dish-price">980 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Тигровые креветки в сладком чили</div><div class="dish-desc">8 шт., сладкий чили/сливочный соус, малина, кунжут</div><div class="dish-price">1050 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Стейк форель</div><div class="dish-desc">150гр, карамелизирован в соусе унаги</div><div class="dish-price">1400 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Свиные рёбра</div><div class="dish-desc">Мед, чеснок, горчица, унаги, терияки</div><div class="dish-price">800 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Запечённые мидии</div><div class="dish-desc">5 шт., майонез, чеддер, унаги, кунжут</div><div class="dish-price">750 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Селёдочка Матье</div><div class="dish-desc">Селёдка, картофель бэби, маринованный лук, хлеб, чеснок</div><div class="dish-price">510 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Баклажаны Пармиджано</div><div class="dish-desc">Баклажан, томаты, пармезан, чеснок, устричный соус, кинза</div><div class="dish-price">700 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 7. ПОКЕ -->
+  <div id="poke" class="menu-section">
+    <div class="category-title">🍚 Поке</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Поке с курицей</div><div class="dish-desc">Рис, курица, огурец, помидор, эдамамэ, чукка, морковь, ореховый соус, терияки, кунжут</div><div class="dish-price">690 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Поке с форелью</div><div class="dish-desc">Рис, форель, огурец, помидор, эдамамэ, чукка, морковь, ореховый соус, кунжут</div><div class="dish-price">590 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Поке с креветками</div><div class="dish-desc">Рис, креветка, огурец, помидор, эдамамэ, чукка, морковь, ореховый соус, кунжут</div><div class="dish-price">750 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 8. ЗАКУСКИ И СНАКИ -->
+  <div id="zakuski" class="menu-section">
+    <div class="category-title">🍟 Закуски / Снэки</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Картофель фри</div><div class="dish-price">250 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Картофельное пюре</div><div class="dish-price">300 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Картофель бэби</div><div class="dish-price">350 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Овощи на пару</div><div class="dish-desc">цветная, брюссельская, брокколи, оливковое масло</div><div class="dish-price">300 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Гренки с сыром</div><div class="dish-price">410 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Сырные палочки</div><div class="dish-desc">Моцарелла, брусничный соус</div><div class="dish-price">470 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Кольца кальмара</div><div class="dish-desc">соус тар-тар</div><div class="dish-price">490 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Крылышки гриль</div><div class="dish-desc">соус барбекю</div><div class="dish-price">590 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Луковые кольца</div><div class="dish-desc">чесночный соус</div><div class="dish-price">410 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Пивной набор XXL</div><div class="dish-desc">Наггетсы, фри, гренки, луковые кольца, крылья, соусы</div><div class="dish-price">1500 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 9. РОЛЛЫ -->
+  <div id="rolls" class="menu-section">
+    <div class="category-title">🍣 Роллы и суши</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Маки с огурцом</div><div class="dish-price">400 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Маки с лососем</div><div class="dish-price">550 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Маки с угрём</div><div class="dish-price">550 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Филадельфия с лососем</div><div class="dish-desc">6шт — 770₽ / 8шт — 980₽</div><div class="dish-price">770 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Филадельфия с угрём</div><div class="dish-desc">6шт 770₽ / 8шт 980₽</div><div class="dish-price">770 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Филадельфия Микс</div><div class="dish-desc">лось+уголь, 6шт 790₽ / 8шт 999₽</div><div class="dish-price">790 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Филадельфия Resto Rose</div><div class="dish-desc">краб, опалённый лосось, ореховый соус, миндаль, малина</div><div class="dish-price">6шт 850₽ / 8шт 1100₽</div></div>
+      <div class="menu-card"><div class="dish-name">Калифорния с креветкой</div><div class="dish-desc">6шт 670₽ / 8шт 870₽</div><div class="dish-price">670 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Калифорния с крабом</div><div class="dish-desc">6шт 630₽ / 8шт 830₽</div><div class="dish-price">630 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Запечённая Филадельфия</div><div class="dish-desc">6шт 790₽ / 8шт 990₽</div><div class="dish-price">790 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 10. ПИЦЦА (33 см) -->
+  <div id="pizza" class="menu-section">
+    <div class="category-title">🍕 Пицца 33 см</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Маргарита</div><div class="dish-desc">моцарелла, красный соус, помидор, зелень</div><div class="dish-price">650 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Пепперони</div><div class="dish-price">850 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Ветчина-грибы</div><div class="dish-price">850 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Курица-грибы</div><div class="dish-price">850 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">4 сыра</div><div class="dish-desc">моцарелла, чеддер, дор-блю, крем-сыр, пармезан</div><div class="dish-price">950 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Охотничья</div><div class="dish-desc">бекон, колбаски, маринованные огурцы, халапеньо, барбекю</div><div class="dish-price">950 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Мясная</div><div class="dish-desc">пепперони, ветчина, курица, лук</div><div class="dish-price">950 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Карбонара (пицца)</div><div class="dish-desc">яйцо, бекон, помидор, пармезан</div><div class="dish-price">900 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Ресто Роус</div><div class="dish-desc">говяжий фарш, перец, микс салата, крем-сыр, айдахо, тар-тар</div><div class="dish-price">1100 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Груша-горгонзола</div><div class="dish-desc">дор блю, груша, мёд, арахис</div><div class="dish-price">950 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Шаверма-пицца</div><div class="dish-desc">куриная грудка, огурцы, помидоры, айсберг, лук, соус шаверма</div><div class="dish-price">900 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">С морепродуктами</div><div class="dish-desc">мидии, креветки, форель, кальмар, оливки, песто</div><div class="dish-price">1500 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 11. ДЕСЕРТЫ -->
+  <div id="desserts" class="menu-section">
+    <div class="category-title">🍰 Десерты</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Чизкейк Нью-Йорк</div><div class="dish-price">390 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Рикотта-груша</div><div class="dish-price">390 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Тирамису</div><div class="dish-price">390 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Графские развалины</div><div class="dish-price">450 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Малина-карамель</div><div class="dish-price">430 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Дубайский шоколад</div><div class="dish-price">450 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Шоколадный фондан</div><div class="dish-desc">с ванильным мороженым</div><div class="dish-price">510 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Шарик мороженого</div><div class="dish-desc">ваниль, клубника, шоколад, баббл-гам 110₽ / фисташка-миндаль 150₽</div><div class="dish-price">110 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 12. ДЕТСКОЕ МЕНЮ -->
+  <div id="kids" class="menu-section">
+    <div class="category-title">🧸 Детское меню</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Куриный супчик</div><div class="dish-price">350 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Пюре с сосисками</div><div class="dish-price">450 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Макароны с маслом и сыром</div><div class="dish-price">300 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Фри детская + наггетсы</div><div class="dish-price">200 ₽ + 200 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Овощные палочки со сметаной</div><div class="dish-price">310 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Блинчики с топпингом</div><div class="dish-price">300 ₽</div></div>
+    </div>
+  </div>
+
+  <!-- 13. БАР / НАПИТКИ (сжато но основное) -->
+  <div id="bar" class="menu-section">
+    <div class="category-title">🍷 Бары / Напитки</div>
+    <div class="menu-grid">
+      <div class="menu-card"><div class="dish-name">Игристое вино</div><div class="dish-desc">Монтефьоре Просекко 3200₽, Мартини Асти 2800₽</div><div class="dish-price">от 2700 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Белые вина</div><div class="dish-desc">Сераф Турень Совиньон 3200₽, Чечилия Беретта Пино Гриджо 3800₽ и др.</div><div class="dish-price">от 2600 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Красные вина</div><div class="dish-desc">Феудо Монтони Неро д'Авола 4600₽, Подджо Аль Казоне Кьянти 4200₽</div><div class="dish-price">от 2600 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Водка/Виски/Ром</div><div class="dish-desc">Русский стандарт 310₽, Jack Daniel's 480₽, Jameson 480₽, Carta Vieja 490₽</div><div class="dish-price">от 310 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Кофе и чай</div><div class="dish-desc">Эспрессо 170₽, Капучино 240₽, Раф 350₽, Чай в ассортименте 195₽, Домашний лимонад 360₽</div><div class="dish-price">от 170 ₽</div></div>
+      <div class="menu-card"><div class="dish-name">Безалкогольные напитки</div><div class="dish-desc">Вода Bon Aqua 250₽, Колла/Спрайт 330₽, Фреши (апельсин/грейпфрут) 390₽, Морс 390₽</div><div class="dish-price">от 250 ₽</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  RESTO ROSE FAMILY — Санкт-Петербург, Шушары <br>
+  Ежедневно 10:00–22:00 | +7 (921) 788-76-26 | <a href="https://vk.ru/restorosefamily" target="_blank" style="color:#d98a5b;">VK</a> | Светлый сайт меню
+</footer>
+
+<script>
+  // переключение категорий
+  const catButtons = document.querySelectorAll('.cat-link');
+  const sections = document.querySelectorAll('.menu-section');
+
+  function switchCategory(catId) {
+    sections.forEach(section => {
+      section.classList.remove('active-section');
+      if (section.id === catId) {
+        section.classList.add('active-section');
+      }
+    });
+    catButtons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-cat') === catId) {
+        btn.classList.add('active');
+      }
+    });
+    window.scrollTo({ top: document.querySelector('.category-nav').offsetTop - 20, behavior: 'smooth' });
+  }
+
+  catButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const catId = btn.getAttribute('data-cat');
+      switchCategory(catId);
+    });
+  });
+</script>
+</body>
+</html>
